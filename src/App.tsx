@@ -1,24 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import CategoryList from './CategoryList';
+import SubcategoryList from './SubcategoryList';
+import {categories} from './icategory.js';
 
-function App() {
+interface Category {
+  name: string;
+  subcategories: string[];
+}
+
+
+const App: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {selectedCategory === null ? (
+        <CategoryList categories={categories} onCategoryClick={handleCategoryClick} />
+      ) : (
+        <SubcategoryList
+          category={categories.find(cat => cat.name === selectedCategory)!}
+          onBack={() => setSelectedCategory(null)}
+        />
+      )}
     </div>
   );
 }
